@@ -18,7 +18,7 @@ const StudentForm = () => {
     const fetchStudentData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/getStudent/${id}`
+          `http://localhost:3001/api/getForm/${id}`
         );
         setFormData(response.data);
       } catch (error) {
@@ -48,7 +48,7 @@ const StudentForm = () => {
       if (id) {
         // Update existing student
         await axios.put(
-          `http://localhost:3001/api/updateStudent/${id}`,
+          `http://localhost:3001/api/updateForm/${id}`,
           formData,
           axiosConfig
         );
@@ -56,7 +56,7 @@ const StudentForm = () => {
       } else {
         // Add new student
         await axios.post(
-          "http://localhost:3001/api/addStudent",
+          "http://localhost:3001/api/addForm",
           formData,
           axiosConfig
         );

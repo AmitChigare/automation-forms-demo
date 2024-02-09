@@ -11,7 +11,7 @@ const Home = () => {
     const fetchStudents = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/getAllStudents"
+          "http://localhost:3001/api/getAllForms"
         );
         setStudents(response.data);
       } catch (error) {
@@ -31,7 +31,7 @@ const Home = () => {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to delete the student with the given ID
-      await axios.delete(`http://localhost:3001/api/deleteStudent/${id}`);
+      await axios.delete(`http://localhost:3001/api/deleteForm/${id}`);
 
       // Update the state to remove the deleted student
       setStudents((prevStudents) =>
@@ -47,7 +47,7 @@ const Home = () => {
   return (
     <div>
       <h1>Hello</h1>
-      <h2>All Students:</h2>
+      <h2>All Students forms:</h2>
       <ul>
         {students.map((student) => (
           <li key={student.id}>

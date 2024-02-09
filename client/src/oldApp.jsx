@@ -19,7 +19,7 @@ const App = () => {
     e.preventDefault();
     try {
       console.log(formData);
-      await axios.post("http://localhost:3001/api/addStudent", formData);
+      await axios.post("http://localhost:3001/api/addForm", formData);
       console.log("Data submitted successfully!");
     } catch (error) {
       console.error("Error submitting data:", error);
