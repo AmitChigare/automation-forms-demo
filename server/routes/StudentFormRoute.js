@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (StudentFormModel) => {
-  router.post("/api/addStudent", async (req, res) => {
+  // Create Student Form
+  router.post("/api/addForm", async (req, res) => {
     const { studentName, course, department, remarks } = req.body;
 
     try {
@@ -23,7 +24,7 @@ module.exports = (StudentFormModel) => {
   });
 
   // Fetch all students from the database
-  router.get("/api/getAllStudents", async (req, res) => {
+  router.get("/api/getAllForms", async (req, res) => {
     try {
       const allStudents = await StudentFormModel.findAll();
       res.json(allStudents);
@@ -34,7 +35,7 @@ module.exports = (StudentFormModel) => {
   });
 
   // Fetch student by ID
-  router.get("/api/getStudent/:id", async (req, res) => {
+  router.get("/api/getForm/:id", async (req, res) => {
     const studentId = req.params.id;
 
     try {
@@ -52,7 +53,7 @@ module.exports = (StudentFormModel) => {
   });
 
   // Update student by ID
-  router.put("/api/updateStudent/:id", async (req, res) => {
+  router.put("/api/updateForm/:id", async (req, res) => {
     const studentId = req.params.id;
     const { studentName, course, department, remarks } = req.body;
 
@@ -74,7 +75,7 @@ module.exports = (StudentFormModel) => {
   });
 
   // Delete student by ID
-  router.delete("/api/deleteStudent/:id", async (req, res) => {
+  router.delete("/api/deleteForm/:id", async (req, res) => {
     const studentId = req.params.id;
 
     try {
