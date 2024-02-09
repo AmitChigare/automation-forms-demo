@@ -7,7 +7,6 @@ const Home = () => {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    // Fetch all students when the component mounts
     const fetchStudents = async () => {
       try {
         const response = await axios.get(
@@ -15,7 +14,12 @@ const Home = () => {
         );
         setStudents(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        if (error.response && error.response.status === 401) {
+          // Unauthorized, redirect to login page
+          window.location.href = "http://localhost:3001/auth/google";
+        } else {
+          console.error("Error fetching data:", error);
+        }
       }
     };
 
@@ -30,14 +34,10 @@ const Home = () => {
 
   const handleDelete = async (id) => {
     try {
-      // Send a DELETE request to delete the student with the given ID
       await axios.delete(`http://localhost:3001/api/deleteForm/${id}`);
-
-      // Update the state to remove the deleted student
       setStudents((prevStudents) =>
         prevStudents.filter((student) => student.id !== id)
       );
-
       console.log(`Student with ID ${id} deleted successfully`);
     } catch (error) {
       console.error(`Error deleting student with ID ${id}:`, error);
@@ -47,7 +47,7 @@ const Home = () => {
   return (
     <div>
       <h1>Hello</h1>
-      <h2>All Students forms:</h2>
+      <h2>All Student Forms:</h2>
       <ul>
         {students.map((student) => (
           <li key={student.id}>
@@ -58,6 +58,7 @@ const Home = () => {
         ))}
       </ul>
       <Link to="/form">Add Student Form</Link>
+      <a href="http://localhost:3001/auth/google">Google Login</a>
     </div>
   );
 };

@@ -1,7 +1,26 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
+
+// Middleware to check for authentication
+const ensureAuthenticated = (req, res, next) => {
+  // if (req.isAuthenticated()) {
+  //   return next();
+  // }
+  if (req.user) {
+    console.log(req.isAuthenticated());
+    return next();
+  }
+  res.status(401).json({ error: "Unauthorized" });
+};
 
 module.exports = (StudentFormModel) => {
+  // Apply Passport middleware
+  // router.use(passport.authenticate("google"));
+
+  // Protect routes with Google authentication
+  router.use(ensureAuthenticated);
+
   // Create Student Form
   router.post("/api/addForm", async (req, res) => {
     const { studentName, course, department, remarks } = req.body;
@@ -91,6 +110,15 @@ module.exports = (StudentFormModel) => {
     } catch (error) {
       console.error("Error deleting student:", error);
       res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  // Handle unauthorized access
+  router.use((err, req, res, next) => {
+    if (err.name === "UnauthorizedError") {
+      res.status(401).json({ error: "Unauthorized" });
+    } else {
+      next(err);
     }
   });
 
