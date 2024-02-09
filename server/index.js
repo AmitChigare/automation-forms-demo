@@ -1,3 +1,4 @@
+// server/index.js
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -23,21 +24,25 @@ const StudentFormModel = require("./models/StudentFormModel")(
   DataTypes
 );
 
-// Synchronize the model with the database and create the table
+// Include the User model
+const User = require("./models/UserModel")(sequelize, DataTypes);
+
+// Synchronize the models with the database
 sequelize
-  // .sync({ force: true })
   .sync()
   .then(() => {
-    // console.log("Table created successfully!");
     console.log("Database synchronized");
   })
   .catch((err) => {
-    console.error("Error creating table:", err);
+    console.error("Error synchronizing database:", err);
   });
 
 // Routers
 const studentFormRoute = require("./routes/StudentFormRoute")(StudentFormModel);
+const userRoute = require("./routes/UserRoute")(User);
+
 app.use("/", studentFormRoute);
+app.use("/user", userRoute);
 
 app.listen(3001, () => {
   console.log("Server running on port 3001");
