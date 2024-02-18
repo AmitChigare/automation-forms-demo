@@ -1,5 +1,7 @@
 // models/UserModel.js
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require("sequelize");
+
+module.exports = (sequelize) => {
   const User = sequelize.define(
     "User",
     {
@@ -11,15 +13,14 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
-      // Add other user attributes as needed
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
-      timestamps: true, // Add timestamps
-      underscored: true, // Use underscored naming (createdAt, updatedAt)
+      timestamps: true,
+      underscored: true,
     }
   );
 

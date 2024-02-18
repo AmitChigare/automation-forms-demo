@@ -2,24 +2,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const passport = require("passport");
-const session = require("express-session"); // Add this line
 const passportConfig = require("./config/passport-config");
 const UserModel = require("./models/UserModel");
-const jwt = require("jsonwebtoken"); // Add this line
 
 app.use(express.json());
 app.use(cors());
-
-// Use express-session middleware
-app.use(
-  session({
-    secret: "your-secret-key", // Add a secret key for session management
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// Load environment variables from .env file if needed
+// require("dotenv").config();
 
 const sequelize = new Sequelize(
   process.env.MYSQL_DATABASE,
@@ -31,14 +22,12 @@ const sequelize = new Sequelize(
   }
 );
 
+// Pass the sequelize instance to UserModel function
 const User = UserModel(sequelize);
-const StudentFormModel = require("./models/StudentFormModel")(
-  sequelize,
-  DataTypes
-);
 
+// Synchronize the models with the database
 sequelize
-  .sync({ force: false })
+  .sync({ force: false }) // Set force to true to drop existing tables and recreate them
   .then(() => {
     console.log("Database synchronized");
   })
@@ -46,24 +35,23 @@ sequelize
     console.error("Error synchronizing database:", err);
   });
 
+// Set up passport with the correct configuration
 passportConfig(passport, User);
 
+// Google authentication callback
 app.get(
   "/api/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
+    // Generate JWT token
     const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1h", // Adjust the expiration time as needed
     });
-    // console.log("user", req.user);
-    res.cookie("token", token); // Set token as a cookie
-    res.redirect("http://127.0.0.1:5173/"); // Redirect without appending token to URL
+    res.redirect(`http://localhost:3000/login?token=${token}`);
   }
 );
 
-// Routers
-const studentFormRoute = require("./routes/StudentFormRoute")(StudentFormModel);
-app.use("/", studentFormRoute);
+// Add your other routes as needed
 
 app.listen(3001, () => {
   console.log("Server running on port 3001");
