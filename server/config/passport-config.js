@@ -1,11 +1,7 @@
 // server/config/passport-config.js
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const { ExtractJwt, Strategy: JwtStrategy } = require("passport-jwt");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-
-const jwtSecret = process.env.JWT_SECRET || "your-secret-key";
 
 module.exports = (passport, User) => {
   passport.use(
@@ -37,31 +33,8 @@ module.exports = (passport, User) => {
     )
   );
 
-  passport.use(
-    new JwtStrategy(
-      {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: jwtSecret,
-      },
-      async (jwtPayload, done) => {
-        try {
-          const user = await User.findByPk(jwtPayload.id);
-
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
-
-          return done(null, user);
-        } catch (error) {
-          console.error("Error during JWT authentication:", error);
-          return done(error, false);
-        }
-      }
-    )
-  );
-
   passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user);
   });
 
   passport.deserializeUser(async (userId, done) => {

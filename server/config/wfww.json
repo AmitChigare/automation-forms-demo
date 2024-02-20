@@ -1,0 +1,4 @@
+sessions: [Object: null prototype] 
+{
+    '3tMUb86oKgNXwNZnZKRg7T24MlDmcpXI': '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":2,"email":"amit.gokakfalls17@gmail.com","password":null,"createdAt":"2024-02-17T08:25:58.000Z","updatedAt":"2024-02-17T08:25:58.000Z"}}}'
+  },

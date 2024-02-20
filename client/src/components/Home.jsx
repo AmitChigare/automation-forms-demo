@@ -6,21 +6,6 @@ const Home = () => {
   const [students, setStudents] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const URLtoken = urlParams.get("token");
-
-  //   // const token = localStorage.getItem("authToken"); // Assuming you store the token in localStorage
-  //   if (URLtoken) {
-  //     // Save the token to local storage or use it as needed
-  //     localStorage.setItem("token", URLtoken);
-  //     const token = localStorage.getItem("authToken");
-  //     if (token) {
-  //       setIsAuthenticated(true);
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -33,18 +18,8 @@ const Home = () => {
       }
     };
 
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      setIsAuthenticated(true);
-    }
-
-    console.log("token: ", token);
-
     fetchStudents();
   }, []);
-
-  console.log(isAuthenticated);
 
   const handleUpdate = (id) => {
     // Navigate to the update form for the specific student
@@ -75,23 +50,21 @@ const Home = () => {
   return (
     <div>
       <h1>Hello</h1>
-      {isAuthenticated ? (
-        <>
-          <h2>All Students forms:</h2>
-          <ul>
-            {students.map((student) => (
-              <li key={student.id}>
-                {`Name: ${student.studentName}, Course: ${student.course}, Department: ${student.department}, Remarks: ${student.remarks}`}
-                <button onClick={() => handleUpdate(student.id)}>Update</button>
-                <button onClick={() => handleDelete(student.id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-          <Link to="/form">Add Student Form</Link>
-        </>
-      ) : (
-        <button onClick={handleLogin}>Log in with Google</button>
-      )}
+
+      <>
+        <h2>All Students forms:</h2>
+        <ul>
+          {students.map((student) => (
+            <li key={student.id}>
+              {`Name: ${student.studentName}, Course: ${student.course}, Department: ${student.department}, Remarks: ${student.remarks}`}
+              <button onClick={() => handleUpdate(student.id)}>Update</button>
+              <button onClick={() => handleDelete(student.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+        <Link to="/form">Add Student Form</Link>
+      </>
+      <button onClick={handleLogin}>Log in with Google</button>
     </div>
   );
 };

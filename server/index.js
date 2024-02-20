@@ -1,4 +1,3 @@
-// server/index.js
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -7,7 +6,7 @@ const passport = require("passport");
 const session = require("express-session"); // Add this line
 const passportConfig = require("./config/passport-config");
 const UserModel = require("./models/UserModel");
-const jwt = require("jsonwebtoken"); // Add this line
+// const jwt = require("jsonwebtoken"); // Add this line
 
 app.use(express.json());
 app.use(
@@ -20,7 +19,7 @@ app.use(
 // Use express-session middleware
 app.use(
   session({
-    secret: "your-secret-key", // Add a secret key for session management
+    secret: "bjhedbebiugheuigeuigegeegiebgebge", // Add a secret key for session management
     resave: false,
     saveUninitialized: false,
   })
@@ -53,16 +52,15 @@ sequelize
 
 passportConfig(passport, User);
 
+app.use(passport.initialize());
+app.use(passport.session()); // Use passport.session() middleware after express-session
+
 app.get(
   "/api/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    // console.log("user", req.user);
-    res.cookie("token", token); // Set token as a cookie
-    res.redirect("http://127.0.0.1:5173/"); // Redirect without appending token to URL
+    // console.log("req.user:", req.user);
+    res.redirect("http://127.0.0.1:5173"); // Redirect without appending token to URL
   }
 );
 
