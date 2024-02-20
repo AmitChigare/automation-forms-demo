@@ -10,7 +10,12 @@ const UserModel = require("./models/UserModel");
 const jwt = require("jsonwebtoken"); // Add this line
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5173", // Replace with your frontend URL
+    credentials: true,
+  })
+);
 
 // Use express-session middleware
 app.use(
