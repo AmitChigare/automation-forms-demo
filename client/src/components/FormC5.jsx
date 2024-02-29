@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import formHeader from "./../assets/form-header.png";
 
-const FormC1 = () => {
+const FormC5 = () => {
   const [personalInfo, setPersonalInfo] = useState({
     studentName: "Amit Chigare",
     email: "ec20b1071@iiitdm.ac.in",
@@ -10,43 +10,45 @@ const FormC1 = () => {
     department: "ECE",
   });
 
-  const [academicPerformance, setAcademicPerformance] = useState({
-    cgpa: "",
-    backlogDetails: "",
-  });
-
-  const [programs, setPrograms] = useState(["Programme 1"]);
+  const [courses, setCourses] = useState([
+    {
+      courseCode: "",
+      courseName: "",
+      chosenCategory: "",
+      changeCategory: "",
+      reason: "",
+    },
+  ]);
 
   const handlePersonalInfoChange = (e) => {
     const { name, value } = e.target;
     setPersonalInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
-  const handleAcademicPerformanceChange = (e) => {
-    const { name, value } = e.target;
-    setAcademicPerformance((prevPerformance) => ({
-      ...prevPerformance,
-      [name]: value,
-    }));
+  const handleCourseChange = (index, field, value) => {
+    const updatedCourses = [...courses];
+    updatedCourses[index][field] = value;
+    setCourses(updatedCourses);
   };
 
-  const handleProgramChange = (index, value) => {
-    const updatedPrograms = [...programs];
-    updatedPrograms[index] = value;
-    setPrograms(updatedPrograms);
+  const addCourse = (e) => {
+    e.preventDefault();
+    const newCourse = {
+      courseCode: "",
+      courseName: "",
+      chosenCategory: "",
+      changeCategory: "",
+      reason: "",
+    };
+    setCourses([...courses, newCourse]);
   };
 
-  const addProgram = (e) => {
+  const removeCourse = (e) => {
     e.preventDefault();
-    const newProgram = `Programme ${programs.length + 1}`;
-    setPrograms([...programs, newProgram]);
-  };
-  const removeProgram = (e) => {
-    e.preventDefault();
-    if (programs.length > 2) {
-      const updatedPrograms = [...programs];
-      updatedPrograms.pop();
-      setPrograms(updatedPrograms);
+    if (courses.length > 1) {
+      const updatedCourses = [...courses];
+      updatedCourses.pop();
+      setCourses(updatedCourses);
     }
   };
 
@@ -55,8 +57,7 @@ const FormC1 = () => {
     // Perform your submission logic here with the collected data
     console.log("Form submitted with data:", {
       personalInfo,
-      academicPerformance,
-      programs,
+      courses,
     });
   };
 
@@ -67,7 +68,7 @@ const FormC1 = () => {
     >
       <div className="bg-white rounded shadow-lg p-10">
         <h1 className="text-center text-2xl font-bold underline mb-2">
-          Form C1
+          Form C5
         </h1>
         <div className="pb-5 border-b border-gray-400">
           <img className="w-100 h-full" src={formHeader} alt="" />
@@ -76,7 +77,7 @@ const FormC1 = () => {
           <div className="space-y-12 py-10">
             <div className="border-b border-gray-900/10">
               <h2 className="text-base font-semibold text-gray-900 text-center">
-                PROFORMA FOR CHANGE OF PROGRAM UNDER BRANCH TRANSFER
+                PROFORMA FOR CHANGE OF CATEGORY OF ELECTIVE COURSES
               </h2>
 
               <div className="mt-10">
@@ -188,83 +189,132 @@ const FormC1 = () => {
 
               <div className="mt-10">
                 <h2 className="text-base font-bold text-gray-900">
-                  2) Academic Performance
+                  2) List of elective courses for which change is requested:
                 </h2>
                 <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="cgpa"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                  {courses.map((course, index) => (
+                    <div
+                      key={index}
+                      className="sm:col-span-3 pb-5 border-b border-gray-900"
                     >
-                      CGPA
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        required
-                        name="cgpa"
-                        id="cgpa"
-                        value={academicPerformance.cgpa}
-                        onChange={handleAcademicPerformanceChange}
-                        className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-                      />
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-gray-600">
-                      (Attach Semester 1 Grade Card)
-                    </p>
-                  </div>
-
-                  <div className="col-span-full">
-                    <label
-                      htmlFor="backlog-details"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Details of Backlogs, if any
-                    </label>
-                    <div className="mt-2">
-                      <textarea
-                        id="backlog-details"
-                        required
-                        name="backlogDetails"
-                        value={academicPerformance.backlogDetails}
-                        onChange={handleAcademicPerformanceChange}
-                        rows={3}
-                        className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-gray-600">
-                      (Students with less than 8.5 CGPA and backlogs are not
-                      eligible to apply for branch transfer)
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-10">
-                <h2 className="text-base font-bold text-gray-900">
-                  3) List of programme requested under branch transfer (in order
-                  of increasing priority):
-                </h2>
-                <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                  {programs.map((program, index) => (
-                    <div key={index} className="sm:col-span-3">
+                      {/* Course Code */}
                       <label
-                        htmlFor={`programme-${index + 1}`}
+                        htmlFor={`courseCode-${index}`}
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        {program}
+                        Course Code {index + 1}
                       </label>
                       <div className="mt-2">
                         <input
                           type="text"
                           required
-                          name={`programme-${index + 1}`}
-                          id={`programme-${index + 1}`}
-                          value={programs[index]}
+                          name={`courseCode-${index}`}
+                          id={`courseCode-${index}`}
+                          value={course.courseCode}
                           onChange={(e) =>
-                            handleProgramChange(index, e.target.value)
+                            handleCourseChange(
+                              index,
+                              "courseCode",
+                              e.target.value
+                            )
                           }
-                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+
+                      {/* Course Name */}
+                      <label
+                        htmlFor={`courseName-${index}`}
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Course Name {index + 1}
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          required
+                          name={`courseName-${index}`}
+                          id={`courseName-${index}`}
+                          value={course.courseName}
+                          onChange={(e) =>
+                            handleCourseChange(
+                              index,
+                              "courseName",
+                              e.target.value
+                            )
+                          }
+                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+
+                      {/* Chosen Category */}
+                      <label
+                        htmlFor={`chosenCategory-${index}`}
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Chosen Category {index + 1}
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          required
+                          name={`chosenCategory-${index}`}
+                          id={`chosenCategory-${index}`}
+                          value={course.chosenCategory}
+                          onChange={(e) =>
+                            handleCourseChange(
+                              index,
+                              "chosenCategory",
+                              e.target.value
+                            )
+                          }
+                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+
+                      {/* Change Category */}
+                      <label
+                        htmlFor={`changeCategory-${index}`}
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Change Category {index + 1}
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          required
+                          name={`changeCategory-${index}`}
+                          id={`changeCategory-${index}`}
+                          value={course.changeCategory}
+                          onChange={(e) =>
+                            handleCourseChange(
+                              index,
+                              "changeCategory",
+                              e.target.value
+                            )
+                          }
+                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+
+                      {/* Reason */}
+                      <label
+                        htmlFor={`reason-${index}`}
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Reason {index + 1}
+                      </label>
+                      <div className="mt-2">
+                        <textarea
+                          id={`reason-${index}`}
+                          required
+                          name={`reason-${index}`}
+                          value={course.reason}
+                          onChange={(e) =>
+                            handleCourseChange(index, "reason", e.target.value)
+                          }
+                          rows={3}
+                          className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
                     </div>
@@ -275,15 +325,15 @@ const FormC1 = () => {
               <div className="sm:col-span-3 mt-5">
                 <button
                   className="my-4 mr-5 bg-indigo-500 text-white px-3 py-1 rounded-md"
-                  onClick={addProgram}
+                  onClick={addCourse}
                 >
-                  Add Programme
+                  Add Course
                 </button>
                 <button
                   className="my-4 bg-red-500 text-white px-3 py-1 rounded-md"
-                  onClick={removeProgram}
+                  onClick={removeCourse}
                 >
-                  Remove Programme
+                  Remove Course
                 </button>
               </div>
             </div>
@@ -306,4 +356,4 @@ const FormC1 = () => {
   );
 };
 
-export default FormC1;
+export default FormC5;

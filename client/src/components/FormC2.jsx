@@ -53,11 +53,11 @@ const FormC2 = () => {
 
   return (
     <div className="bg-gray-200 w-full p-5 flex justify-center items-center">
-      <div className="bg-white rounded shadow-lg p-10">
+      <div className="bg-white rounded shadow-lg p-10" style={{ width: "70%" }}>
         <h1 className="text-center text-2xl font-bold underline mb-2">
           Form C2
         </h1>
-        <div className="pb-5 border-b border-gray-400">
+        <div className="flex justify-center pb-5 border-b border-gray-400">
           <img className="w-100 h-full" src={formHeader} alt="" />
         </div>
 
