@@ -20,11 +20,14 @@ export const FormProvider = ({ children }) => {
       backlogDetails: "",
     },
     programs: ["Programme 1"],
+    approvalRequired: ["Not Submitted", "FA", "HOD", "Dean"],
+    currentStatus: 0,
+    currentApprovalPerson: "Not Submitted", // Initially set to Not Submitted
   });
 
   const [approvalStatus, setApprovalStatus] = useState({
     currentStatus: 0, // 0: Not Submitted, 1: Person 1, 2: Person 2, 3: Person 3
-    approvalRequired: ["Not Submitted", "Person 1", "Person 2", "Person 3"],
+    approvalRequired: ["Not Submitted", "FA", "HOD", "Dean"],
   });
 
   const handlePersonalInfoChange = (e) => {
@@ -65,41 +68,31 @@ export const FormProvider = ({ children }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Update approval status and determine the next approvalRequired
-    const nextStatus = approvalStatus.currentStatus + 1;
-    const updatedApprovalStatus = {
+    const nextStatus = formState.currentStatus + 1;
+    const nextApprovalPerson = formState.approvalRequired[nextStatus];
+    const updatedFormState = {
+      ...formState,
       currentStatus: nextStatus,
-      approvalRequired: approvalStatus.approvalRequired[nextStatus],
+      currentApprovalPerson: nextApprovalPerson,
     };
 
-    axios.post("http://localhost:8888/api/formC1", formState);
-
-    // Perform your submission logic here with the collected data
-    console.log("Form submitted with data:", formState);
-
-    // Make a POST request to your PHP backend
-    // fetch("http://your-backend-url/submit_form.php", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(formState),
-    // })
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       // Assuming you have a function to update the approvalStatus state
-    //       setApprovalStatus(updatedApprovalStatus);
-    //       console.log("Form data saved successfully.");
-    //     } else {
-    //       throw new Error("Failed to save form data.");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
+    try {
+      // Post the updated form state to the backend
+      const response = await axios.post(
+        "http://localhost:8888/api/formC1",
+        updatedFormState
+      );
+      console.log("Form submitted with data:", updatedFormState);
+      console.log("Response:", response.data);
+      // Update the form state with the new currentStatus and currentApprovalPerson
+      setFormState(updatedFormState);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
