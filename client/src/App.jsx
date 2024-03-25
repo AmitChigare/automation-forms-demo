@@ -1,13 +1,14 @@
 // src/App.jsx
 import Home from "./components/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import StudentForm from "./components/StudentForm";
 import FormC1 from "./components/FormC1";
 import FormC2 from "./components/FormC2";
 import FormC3 from "./components/FormC3";
 import FormC4 from "./components/FormC4";
 import FormC5 from "./components/FormC5";
 import { FormProvider } from "./components/FormContext";
+import DashboardFA from "./components/DashboardFA";
+import DashboardHOD from "./components/DashboardHOD";
 
 const App = () => {
   return (
@@ -28,6 +29,8 @@ const App = () => {
         <Route path={"/form-c3"} element={<FormC3 />} />
         <Route path={"/form-c4"} element={<FormC4 />} />
         <Route path={"/form-c5"} element={<FormC5 />} />
+        <Route path={"/fa-dashboard"} element={<DashboardFA />} />
+        <Route path={"/hod-dashboard"} element={<DashboardHOD />} />
         {/* <Route path={"/form"} element={<StudentForm />} /> */}
         {/* <Route path={"/form/:id"} element={<StudentForm />} /> */}
       </Routes>

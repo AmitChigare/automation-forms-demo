@@ -72,7 +72,7 @@ export const FormProvider = ({ children }) => {
     e.preventDefault();
 
     // Update approval status and determine the next approvalRequired
-    const nextStatus = formState.currentStatus + 1;
+    const nextStatus = 1;
     const nextApprovalPerson = formState.approvalRequired[nextStatus];
     const updatedFormState = {
       ...formState,
@@ -83,7 +83,7 @@ export const FormProvider = ({ children }) => {
     try {
       // Post the updated form state to the backend
       const response = await axios.post(
-        "http://localhost:8888/api/formC1",
+        "http://localhost:8888/api/formC1/",
         updatedFormState
       );
       console.log("Form submitted with data:", updatedFormState);
